@@ -21,6 +21,14 @@ class DocumentType(str, enum.Enum):
     REPORT = "report"
     SOP = "sop"
     CONTRACT = "contract"
+    # New AI Tools
+    SOCIAL_MEDIA = "social_media"
+    EMAIL = "email"
+    BLOG = "blog"
+    PRODUCT_DESC = "product_desc"
+    YOUTUBE = "youtube"
+    AD_COPY = "ad_copy"
+    REWRITE = "rewrite"
 
 
 class DocumentStatus(str, enum.Enum):
