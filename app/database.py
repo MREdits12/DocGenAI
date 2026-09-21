@@ -32,3 +32,15 @@ def get_db():
 def init_db():
     """Create all database tables."""
     Base.metadata.create_all(bind=engine)
+    
+    # Auto-migrate Postgres Enums to support new AI tools
+    if str(engine.url).startswith("postgresql"):
+        from sqlalchemy import text
+        with engine.connect() as conn:
+            conn.execution_options(isolation_level="AUTOCOMMIT")
+            new_tools = ["social_media", "email", "blog", "product_desc", "youtube", "ad_copy", "rewrite"]
+            for tool in new_tools:
+                try:
+                    conn.execute(text(f"ALTER TYPE documenttype ADD VALUE '{tool}'"))
+                except Exception:
+                    pass
