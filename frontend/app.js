@@ -36,7 +36,6 @@ window.fetch = async function() {
     return response;
 };
 
-
 document.addEventListener('DOMContentLoaded', () => {
     // UI Elements
     const docForm = document.getElementById('doc-form');
@@ -61,7 +60,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const toggleAuth = document.getElementById('toggle-auth');
     const authTitle = document.getElementById('auth-title');
     const authBtn = document.getElementById('auth-btn');
-    const checkoutBtn = document.getElementById('checkout-btn');
     
     let isLogin = true;
     let currentDocHtml = '';
@@ -149,19 +147,65 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
     
-    checkoutBtn.addEventListener('click', async () => {
+    // --- PayPal Subscription Logic ---
+    async function initPayPal() {
         try {
-            const response = await fetch(`${API_BASE_URL}/api/billing/create-checkout-session`, {
-                method: 'POST'
-            });
-            const data = await response.json();
-            if (data.checkout_url) {
-                window.location.href = data.checkout_url;
-            }
+            // Get client ID and Plan ID from backend
+            const res = await fetch(`${API_BASE_URL}/api/billing/paypal-config`);
+            if (!res.ok) return; // Silent fail if paypal isn't configured yet
+            
+            const config = await res.json();
+            
+            // Dynamically load the PayPal JS SDK
+            const script = document.createElement('script');
+            script.src = `https://www.paypal.com/sdk/js?client-id=${config.client_id}&vault=true&intent=subscription`;
+            
+            script.onload = () => {
+                paypal.Buttons({
+                    style: {
+                        shape: 'rect',
+                        color: 'blue',
+                        layout: 'vertical',
+                        label: 'subscribe'
+                    },
+                    createSubscription: function(data, actions) {
+                        return actions.subscription.create({
+                            'plan_id': config.plan_id
+                        });
+                    },
+                    onApprove: async function(data, actions) {
+                        showToast('Payment approved! Verifying...', 'success');
+                        
+                        // Send subscription ID to our backend for verification
+                        try {
+                            const verifyRes = await fetch(`${API_BASE_URL}/api/billing/verify-paypal-subscription`, {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ subscription_id: data.subscriptionID })
+                            });
+                            
+                            const verifyData = await verifyRes.json();
+                            if (verifyData.status === 'success') {
+                                showToast('Welcome to Pro! You now have unlimited documents.', 'success');
+                                upgradeModal.classList.add('hidden');
+                            } else {
+                                showToast(verifyData.message || 'Verification pending.', 'error');
+                            }
+                        } catch (err) {
+                            showToast('Error verifying subscription.', 'error');
+                        }
+                    }
+                }).render('#paypal-button-container');
+            };
+            
+            document.body.appendChild(script);
         } catch (error) {
-            showToast('Unable to start checkout. Check server configuration.', 'error');
+            console.error("PayPal config error:", error);
         }
-    });
+    }
+    
+    // Initialize PayPal buttons when app loads
+    initPayPal();
 
     // --- Document Generation Logic ---
     docForm.addEventListener('submit', async (e) => {
@@ -324,7 +368,6 @@ async function previewDocument(docId) {
 }
 
 function downloadPdf(docId) {
-    // Opens the document in a new tab
     window.open(`${API_BASE_URL}/api/documents/${docId}/pdf`, '_blank');
 }
 
