@@ -406,7 +406,7 @@ class AIService:
         settings = get_settings()
         if settings.gemini_api_key:
             genai.configure(api_key=settings.gemini_api_key)
-         self.model = genai.GenerativeModel("gemini-1.5-flash")
+            self.model = genai.GenerativeModel("gemini-1.5-flash")
         else:
             self.model = None
 
@@ -504,3 +504,5 @@ class AIService:
 
 # Singleton instance
 ai_service = AIService()
+
+
