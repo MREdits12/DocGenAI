@@ -3,19 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DocGen AI - AI-Powered Document Generator</title>
+    <title>AI Toolbox - 8 Professional AI Tools for Business</title>
     <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <header class="header">
         <div class="container header-content">
-            <div class="logo">DocGen AI</div>
+            <div class="logo">AI Toolbox</div>
             <nav>
                 <a href="#features">Features</a>
                 <a href="#how-it-works">How It Works</a>
-                <a href="#generator">Generate</a>
-                <a href="#history">History</a>
+                <a href="#generator">AI Generator</a>
+                <a href="#history">My History</a>
                 <a href="#" id="nav-auth-btn" class="btn btn-primary btn-sm" style="color: white; margin-left: 20px;">Sign In</a>
             </nav>
         </div>
@@ -24,30 +24,30 @@
     <main>
         <section class="hero">
             <div class="container hero-content">
-                <h1>Stop Wasting Time on Paperwork</h1>
-                <p>DocGen AI turns your rough notes into polished, professional business documents in seconds. Save hours of formatting and writing.</p>
+                <h1>The Ultimate AI Toolbox for Business</h1>
+                <p>Generate professional documents, social media posts, SEO blogs, and ad copy in seconds. 8 powerful AI tools in one dashboard.</p>
                 <a href="#generator" class="btn btn-primary btn-large">Start Generating for Free</a>
             </div>
         </section>
 
         <section id="features" class="section bg-light">
             <div class="container">
-                <h2 class="section-title text-center">Why use DocGen AI?</h2>
+                <h2 class="section-title text-center">8 Tools, 1 Price</h2>
                 <div class="features-grid">
                     <div class="feature-card">
-                        <div class="feature-icon">⚡</div>
-                        <h3>Lightning Fast</h3>
-                        <p>Go from rough bullet points to a complete, professional document in less than 10 seconds.</p>
+                        <div class="feature-icon">📝</div>
+                        <h3>Business Docs</h3>
+                        <p>Write proposals, invoices, contracts, and SOPs perfectly formatted.</p>
                     </div>
                     <div class="feature-card">
-                        <div class="feature-icon">💼</div>
-                        <h3>Professional Quality</h3>
-                        <p>Our AI is trained on industry-standard business documents to ensure you always look your best.</p>
+                        <div class="feature-icon">📱</div>
+                        <h3>Social & Marketing</h3>
+                        <p>Generate highly engaging posts for LinkedIn, Twitter, and Facebook.</p>
                     </div>
                     <div class="feature-card">
-                        <div class="feature-icon">💸</div>
-                        <h3>Zero Cost to Start</h3>
-                        <p>Generate proposals, invoices, and reports completely free while you build your business.</p>
+                        <div class="feature-icon">📈</div>
+                        <h3>SEO & Ads</h3>
+                        <p>Write ranking blog posts and high-converting ad copy instantly.</p>
                     </div>
                 </div>
             </div>
@@ -59,18 +59,18 @@
                 <div class="steps-grid">
                     <div class="step-card">
                         <div class="step-number">1</div>
-                        <h3>Tell us what you need</h3>
-                        <p>Select your document type and dump your rough notes, data, or bullet points into the form.</p>
+                        <h3>Select a Tool</h3>
+                        <p>Choose from 8 different AI tools depending on what you need to write.</p>
                     </div>
                     <div class="step-card">
                         <div class="step-number">2</div>
-                        <h3>AI Does the Magic</h3>
-                        <p>Our advanced AI expands your notes, formats the content, and builds a professional structure.</p>
+                        <h3>Provide Context</h3>
+                        <p>Give the AI a few rough bullet points or details to work with.</p>
                     </div>
                     <div class="step-card">
                         <div class="step-number">3</div>
-                        <h3>Download & Send</h3>
-                        <p>Preview the result, copy the HTML, or download a perfectly formatted PDF ready for your client.</p>
+                        <h3>Generate & Export</h3>
+                        <p>Copy the HTML, or download a perfectly formatted PDF.</p>
                     </div>
                 </div>
             </div>
@@ -78,24 +78,36 @@
 
         <section id="generator" class="section bg-light">
             <div class="container">
-                <h2 class="section-title">Create a New Document</h2>
+                <h2 class="section-title">AI Toolbox Dashboard</h2>
                 <div class="generator-layout">
                     <div class="card form-card">
                         <form id="doc-form">
                             <div class="form-group">
-                                <label for="title">Document Title</label>
-                                <input type="text" id="title" name="title" required placeholder="e.g., Q3 Marketing Proposal">
+                                <label for="title">Title / Name</label>
+                                <input type="text" id="title" name="title" required placeholder="e.g., Q3 Marketing Plan">
                             </div>
                             
                             <div class="form-group">
-                                <label for="document_type">Document Type</label>
+                                <label for="document_type">Select AI Tool</label>
                                 <select id="document_type" name="document_type" required>
-                                    <option value="" disabled selected>Select a type...</option>
-                                    <option value="proposal">Business Proposal</option>
-                                    <option value="invoice">Invoice</option>
-                                    <option value="report">Business Report</option>
-                                    <option value="sop">Standard Operating Procedure (SOP)</option>
-                                    <option value="contract">Contract / Agreement</option>
+                                    <optgroup label="Business Documents">
+                                        <option value="proposal">Business Proposal</option>
+                                        <option value="invoice">Invoice</option>
+                                        <option value="contract">Contract / Agreement</option>
+                                        <option value="sop">SOP</option>
+                                        <option value="report">Business Report</option>
+                                    </optgroup>
+                                    <optgroup label="Marketing & Social">
+                                        <option value="social_media">Social Media Post (LinkedIn/Twitter/FB)</option>
+                                        <option value="email">Professional Email / Outreach</option>
+                                        <option value="blog">SEO Blog Article</option>
+                                        <option value="product_desc">Product Description</option>
+                                        <option value="youtube">YouTube Video Script</option>
+                                        <option value="ad_copy">Ad Copy (Facebook/Google Ads)</option>
+                                    </optgroup>
+                                    <optgroup label="Editing">
+                                        <option value="rewrite">Rewrite & Improve Text</option>
+                                    </optgroup>
                                 </select>
                             </div>
 
