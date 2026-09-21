@@ -406,7 +406,32 @@ class AIService:
         settings = get_settings()
         if settings.gemini_api_key:
             genai.configure(api_key=settings.gemini_api_key)
-            self.model = genai.GenerativeModel("gemini-pro")
+            
+            # Auto-discover a supported model for this specific API Key
+            best_model = "gemini-1.5-flash"
+            try:
+                available = []
+                for m in genai.list_models():
+                    if 'generateContent' in m.supported_generation_methods:
+                        name = m.name.replace('models/', '')
+                        available.append(name)
+                
+                if available:
+                    flash_models = [m for m in available if 'flash' in m]
+                    pro_models = [m for m in available if 'pro' in m]
+                    
+                    if flash_models:
+                        best_model = flash_models[0]
+                    elif pro_models:
+                        best_model = pro_models[0]
+                    else:
+                        best_model = available[0]
+                        
+                print(f"[OK] Auto-selected AI model: {best_model}")
+            except Exception as e:
+                print(f"[ERROR] Failed to auto-detect models: {e}")
+                
+            self.model = genai.GenerativeModel(best_model)
         else:
             self.model = None
 
@@ -416,12 +441,8 @@ class AIService:
         user_input: str,
         additional_context: str | None = None,
     ) -> str:
-        """Generate a professional document using AI.
-
-        Returns the generated HTML content.
-        """
+        """Generate a professional document using AI."""
         if not self.model:
-            # Return a demo document if no API key is configured
             return self._generate_demo_document(document_type, user_input)
 
         prompt_template = PROMPTS.get(document_type, PROMPTS[DocumentType.REPORT])
@@ -440,7 +461,6 @@ class AIService:
 
         html_content = response.text.strip()
 
-        # Clean up any markdown code fences the model might have added
         if html_content.startswith("```html"):
             html_content = html_content[7:]
         if html_content.startswith("```"):
@@ -448,7 +468,6 @@ class AIService:
         if html_content.endswith("```"):
             html_content = html_content[:-3]
 
-        # Wrap with professional CSS
         full_html = f"""<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -466,7 +485,7 @@ class AIService:
     def _generate_demo_document(
         self, document_type: DocumentType, user_input: str
     ) -> str:
-        """Generate a demo document when no API key is set (for testing)."""
+        """Generate a demo document when no API key is set."""
         title = document_type.value.title()
         return f"""<!DOCTYPE html>
 <html lang="en">
@@ -493,11 +512,6 @@ class AIService:
         <li>Restart the server</li>
         <li>The AI will generate a full professional {title.lower()} based on your input</li>
     </ol>
-    
-    <div class="disclaimer">
-        <strong>Demo Mode:</strong> Get your free Gemini API key at 
-        <a href="https://aistudio.google.com/apikey">aistudio.google.com/apikey</a>
-    </div>
 </body>
 </html>"""
 
