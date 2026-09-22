@@ -32,6 +32,14 @@ def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(
     return user
 
 def require_generation_credits(current_user: User = Depends(get_current_user)) -> User:
-    """Ensure the user is allowed to generate a document. Removed limits as per request."""
-    # Limits disabled - completely free
+    """Ensure the user is allowed to generate a document."""
+    if current_user.tier == UserTier.PRO:
+        return current_user
+        
+    if current_user.document_count >= 3:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="FREE_LIMIT_REACHED"
+        )
+        
     return current_user
