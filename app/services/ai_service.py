@@ -1,4 +1,4 @@
-"""DocGen AI - AI Generation Service using Groq (Llama 3.1)"""
+"""DocGen AI - AI Generation Service using Groq"""
 from groq import Groq
 from app.config import get_settings
 from app.models import DocumentType
@@ -287,39 +287,124 @@ ADDITIONAL CONTEXT (Tone / Instructions):
 DOCUMENT_CSS = """
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+    
     * { margin: 0; padding: 0; box-sizing: border-box; }
+    
     body {
         font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-        line-height: 1.7; color: #1a1a2e; max-width: 800px;
-        margin: 0 auto; padding: 40px; background: #ffffff;
+        line-height: 1.7;
+        color: #1a1a2e;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 40px;
+        background: #ffffff;
     }
-    h1 { font-size: 28px; font-weight: 700; color: #1a1a2e; margin-bottom: 8px; border-bottom: 3px solid #6c63ff; padding-bottom: 12px; }
-    h2 { font-size: 20px; font-weight: 600; color: #2d2d5e; margin-top: 32px; margin-bottom: 12px; padding-bottom: 6px; border-bottom: 1px solid #e8e8f0; }
-    h3 { font-size: 16px; font-weight: 600; color: #3d3d7e; margin-top: 20px; margin-bottom: 8px; }
-    p { margin-bottom: 12px; font-size: 14px; }
-    ul, ol { margin: 12px 0; padding-left: 24px; }
-    li { margin-bottom: 6px; font-size: 14px; }
-    table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 13px; }
-    thead { background: #6c63ff; color: white; }
-    th { padding: 10px 14px; text-align: left; font-weight: 600; }
-    td { padding: 10px 14px; border-bottom: 1px solid #e8e8f0; }
-    tbody tr:nth-child(even) { background: #f8f8fc; }
+    
+    h1 {
+        font-size: 28px;
+        font-weight: 700;
+        color: #1a1a2e;
+        margin-bottom: 8px;
+        border-bottom: 3px solid #6c63ff;
+        padding-bottom: 12px;
+    }
+    
+    h2 {
+        font-size: 20px;
+        font-weight: 600;
+        color: #2d2d5e;
+        margin-top: 32px;
+        margin-bottom: 12px;
+        padding-bottom: 6px;
+        border-bottom: 1px solid #e8e8f0;
+    }
+    
+    h3 {
+        font-size: 16px;
+        font-weight: 600;
+        color: #3d3d7e;
+        margin-top: 20px;
+        margin-bottom: 8px;
+    }
+    
+    p {
+        margin-bottom: 12px;
+        font-size: 14px;
+    }
+    
+    ul, ol {
+        margin: 12px 0;
+        padding-left: 24px;
+    }
+    
+    li {
+        margin-bottom: 6px;
+        font-size: 14px;
+    }
+    
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 16px 0;
+        font-size: 13px;
+    }
+    
+    thead {
+        background: #6c63ff;
+        color: white;
+    }
+    
+    th {
+        padding: 10px 14px;
+        text-align: left;
+        font-weight: 600;
+    }
+    
+    td {
+        padding: 10px 14px;
+        border-bottom: 1px solid #e8e8f0;
+    }
+    
+    tbody tr:nth-child(even) {
+        background: #f8f8fc;
+    }
+    
     strong { font-weight: 600; }
-    .cover-page { text-align: center; padding: 60px 0; margin-bottom: 40px; border-bottom: 2px solid #6c63ff; }
-    .signature-line { border-top: 1px solid #333; width: 250px; margin-top: 40px; padding-top: 8px; }
-    .disclaimer { margin-top: 40px; padding: 12px; background: #fff3cd; border-left: 4px solid #ffc107; font-size: 12px; color: #856404; }
+    
+    .cover-page {
+        text-align: center;
+        padding: 60px 0;
+        margin-bottom: 40px;
+        border-bottom: 2px solid #6c63ff;
+    }
+    
+    .signature-line {
+        border-top: 1px solid #333;
+        width: 250px;
+        margin-top: 40px;
+        padding-top: 8px;
+    }
+    
+    .disclaimer {
+        margin-top: 40px;
+        padding: 12px;
+        background: #fff3cd;
+        border-left: 4px solid #ffc107;
+        font-size: 12px;
+        color: #856404;
+    }
 </style>
 """
 
 
 class AIService:
-    """Service for generating documents using Groq (Llama 3.1 70B)."""
+    """Service for generating documents using Groq."""
 
     def __init__(self):
         settings = get_settings()
         if settings.groq_api_key:
             self.client = Groq(api_key=settings.groq_api_key)
-            self.model = "llama-3.1-70b-versatile"
+            self.model = "llama3-70b-8192"
             print(f"[OK] Groq AI initialized with model: {self.model}")
         else:
             self.client = None
@@ -362,6 +447,7 @@ class AIService:
             html_content = chat_completion.choices[0].message.content.strip()
         except Exception as e:
             print(f"[ERROR] Primary model failed: {e}")
+            # Fallback to smaller model
             try:
                 chat_completion = self.client.chat.completions.create(
                     messages=[
@@ -374,7 +460,7 @@ class AIService:
                             "content": prompt,
                         }
                     ],
-                    model="llama-3.1-8b-instant",
+                    model="llama3-8b-8192",
                     temperature=0.7,
                     max_tokens=8000,
                 )
@@ -383,6 +469,7 @@ class AIService:
                 print(f"[ERROR] Fallback model also failed: {e2}")
                 raise e2
 
+        # Clean up any markdown code fences the model might have added
         if html_content.startswith("```html"):
             html_content = html_content[7:]
         if html_content.startswith("```"):
@@ -390,6 +477,7 @@ class AIService:
         if html_content.endswith("```"):
             html_content = html_content[:-3]
 
+        # Wrap with professional CSS
         full_html = f"""<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -420,14 +508,25 @@ class AIService:
         <h1>{title}</h1>
         <p><em>Generated by AI Toolbox</em></p>
     </div>
+    
     <h2>Demo Document</h2>
-    <p>This is a demo document. To generate real AI-powered documents, add your Groq API key.</p>
+    <p>This is a demo document. To generate real AI-powered documents, 
+    add your Groq API key to the environment variables.</p>
+    
     <h2>Your Input</h2>
     <p>{user_input}</p>
+    
+    <h2>How It Works</h2>
+    <ol>
+        <li>Get your free Groq API key at <a href="https://console.groq.com">console.groq.com</a></li>
+        <li>Add it as GROQ_API_KEY in your environment</li>
+        <li>Restart the server and generate unlimited documents</li>
+    </ol>
 </body>
 </html>"""
 
 
+# Singleton instance
 ai_service = AIService()
 
 
