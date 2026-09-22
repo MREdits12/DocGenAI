@@ -404,38 +404,35 @@ class AIService:
         settings = get_settings()
         if settings.groq_api_key:
             self.client = Groq(api_key=settings.groq_api_key)
-            
-            # Dynamically fetch available models so we NEVER hit a 400 Decommissioned error
             try:
                 models_response = self.client.models.list()
-                available_models = [m.id for m in models_response.data]
+                all_models = [m.id for m in models_response.data]
                 
-                # We prioritize the biggest/best models, but fall back to literally whatever they have active
-                preferred = [
-                    "llama-3.3-70b-versatile",
-                    "llama-3.3-70b-specdec",
-                    "llama-3.2-90b-text-preview",
-                    "llama-3.1-70b-versatile",
-                    "mixtral-8x7b-32768",
-                    "gemma2-9b-it",
-                    "llama3-70b-8192"
+                # Filter out guard models, audio models, and models requiring special terms
+                valid_models = [
+                    m for m in all_models 
+                    if "guard" not in m.lower() 
+                    and "whisper" not in m.lower()
+                    and "orpheus" not in m.lower()
                 ]
                 
-                self.model = next((m for m in preferred if m in available_models), available_models[0] if available_models else "llama3-8b-8192")
-                
-                # Reverse the list for a smaller/faster fallback model
-                fallback_preferred = ["llama-3.2-11b-vision-preview", "llama-3.2-3b-preview", "llama-3.1-8b-instant", "gemma2-9b-it"]
-                self.fallback_model = next((m for m in fallback_preferred if m in available_models), available_models[-1] if available_models else self.model)
-                
-                print(f"[OK] Groq AI initialized with primary model: {self.model} (Fallback: {self.fallback_model})")
+                # Sort so that 'llama' models (especially 70b) are prioritized
+                def sort_key(m):
+                    m_lower = m.lower()
+                    score = 0
+                    if "70b" in m_lower: score -= 10
+                    if "llama" in m_lower: score -= 5
+                    if "mixtral" in m_lower: score -= 4
+                    return score
+                    
+                self.available_models = sorted(valid_models, key=sort_key)
+                print(f"[OK] Groq AI initialized with {len(self.available_models)} models.")
             except Exception as e:
                 print(f"[WARN] Failed to fetch Groq models: {e}")
-                self.model = "llama-3.3-70b-versatile"
-                self.fallback_model = "mixtral-8x7b-32768"
+                self.available_models = ["llama-3.3-70b-versatile", "mixtral-8x7b-32768"]
         else:
             self.client = None
-            self.model = None
-            self.fallback_model = None
+            self.available_models = []
             print("[WARN] No GROQ_API_KEY set. AI generation will use demo mode.")
 
     async def generate_document(
@@ -454,58 +451,36 @@ class AIService:
             additional_context=additional_context or "No additional context provided.",
         )
 
-        try:
-            chat_completion = self.client.chat.completions.create(
-                messages=[
-                    {
-                        "role": "system",
-                        "content": "You are a professional document generator. You output ONLY raw HTML content. Never wrap your output in markdown code fences. Never include ```html or ```. Just output the HTML directly."
-                    },
-                    {
-                        "role": "user",
-                        "content": prompt,
-                    }
-                ],
-                model=self.model,
-                temperature=0.7,
-                max_tokens=8000,
-            )
-
-            html_content = chat_completion.choices[0].message.content.strip()
-        except Exception as e:
-            print(f"[ERROR] Primary model {self.model} failed: {e}")
-            # Fallback to secondary model
+        last_error = None
+        # Try the top 5 models until one succeeds
+        for model_id in self.available_models[:5]:
             try:
                 chat_completion = self.client.chat.completions.create(
                     messages=[
                         {
                             "role": "system",
-                            "content": "You are a professional document generator. Output ONLY raw HTML."
+                            "content": "You are a professional document generator. You output ONLY raw HTML content. Never wrap your output in markdown code fences. Never include ```html or ```. Just output the HTML directly."
                         },
                         {
                             "role": "user",
                             "content": prompt,
                         }
                     ],
-                    model=self.fallback_model,
+                    model=model_id,
                     temperature=0.7,
-                    max_tokens=8000,
+                    max_tokens=4000,
                 )
                 html_content = chat_completion.choices[0].message.content.strip()
-            except Exception as e2:
-                print(f"[ERROR] Fallback model also failed: {e2}")
-                raise e2
-
-        # Clean up any markdown code fences the model might have added
-        if html_content.startswith("```html"):
-            html_content = html_content[7:]
-        if html_content.startswith("```"):
-            html_content = html_content[3:]
-        if html_content.endswith("```"):
-            html_content = html_content[:-3]
-
-        # Wrap with professional CSS
-        full_html = f"""<!DOCTYPE html>
+                
+                # Clean up any markdown code fences the model might have added
+                if html_content.startswith("```html"):
+                    html_content = html_content[7:]
+                if html_content.startswith("```"):
+                    html_content = html_content[3:]
+                if html_content.endswith("```"):
+                    html_content = html_content[:-3]
+        
+                full_html = f"""<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -516,8 +491,14 @@ class AIService:
 {html_content.strip()}
 </body>
 </html>"""
-
-        return full_html
+                return full_html
+                
+            except Exception as e:
+                print(f"[WARN] Model {model_id} failed: {e}")
+                last_error = e
+                continue
+                
+        raise Exception(f"All models failed. Last error: {last_error}")
 
     def _generate_demo_document(
         self, document_type: DocumentType, user_input: str
@@ -555,4 +536,3 @@ class AIService:
 
 # Singleton instance
 ai_service = AIService()
-
