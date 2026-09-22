@@ -3,152 +3,236 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Toolbox - 8 Professional AI Tools for Business</title>
+    <title>AI Toolbox | Next-Gen Business Suite</title>
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- AOS Animation Library -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- PayPal SDK -->
+    <script src="https://www.paypal.com/sdk/js?client-id=AVb4NezD1E1Xk24w8yK2d0b-Oa4O9YhQp2gAteG-q6z-hH5f28n7zN-l5fS3Hn1x9Hj5Vq6P9k8C6x_w&currency=USD"></script>
 </head>
-<body>
-    <header class="header">
-        <div class="container header-content">
-            <div class="logo">AI Toolbox</div>
-            <nav>
+<body class="dark-theme">
+    <nav class="navbar glass">
+        <div class="container nav-content">
+            <div class="logo">
+                <span class="logo-icon">✨</span>
+                <span class="logo-text">AI Toolbox</span>
+            </div>
+            <div class="nav-links">
                 <a href="#features">Features</a>
-                <a href="#how-it-works">How It Works</a>
-                <a href="#generator">AI Generator</a>
-                <a href="#history">My History</a>
-                <a href="#" id="nav-auth-btn" class="btn btn-primary btn-sm" style="color: white; margin-left: 20px;">Sign In</a>
-            </nav>
+                <a href="#generator">The App</a>
+                <a href="#history">History</a>
+                <button class="btn btn-outline" id="nav-login-btn">Sign In</button>
+            </div>
         </div>
-    </header>
+    </nav>
 
     <main>
         <section class="hero">
-            <div class="container hero-content">
-                <h1>The Ultimate AI Toolbox for Business</h1>
-                <p>Generate professional documents, social media posts, SEO blogs, and ad copy in seconds. 8 powerful AI tools in one dashboard.</p>
-                <a href="#generator" class="btn btn-primary btn-large">Start Generating for Free</a>
+            <div class="glow-orb top-left"></div>
+            <div class="glow-orb bottom-right"></div>
+            <div class="container hero-container">
+                <div class="hero-content" data-aos="fade-up" data-aos-duration="1000">
+                    <div class="badge">Version 2.0 Now Live</div>
+                    <h1 class="hero-title">Your Ultimate <span class="gradient-text">Business AI</span> Toolbox</h1>
+                    <p class="hero-subtitle">Automate your proposals, social media, emails, and SEO blogs in seconds. The power of 8 premium AI agents in one sleek dashboard.</p>
+                    <div class="hero-cta">
+                        <a href="#generator" class="btn btn-glow">Start Generating Free</a>
+                        <p class="hero-guarantee">No credit card required for free tier.</p>
+                    </div>
+                </div>
+                
+                <!-- Floating Dashboard Mockup -->
+                <div class="hero-visual" data-aos="zoom-in-up" data-aos-delay="200" data-aos-duration="1200">
+                    <div class="mockup-window glass">
+                        <div class="mockup-header">
+                            <span class="dot red"></span>
+                            <span class="dot yellow"></span>
+                            <span class="dot green"></span>
+                        </div>
+                        <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=1000" alt="Dashboard Preview" class="mockup-img">
+                    </div>
+                </div>
             </div>
         </section>
 
-        <section id="features" class="section bg-light">
+        <!-- Marquee / Social Proof -->
+        <div class="marquee-section">
+            <p class="marquee-label">POWERING THE NEXT GENERATION OF BUSINESSES</p>
+            <div class="marquee">
+                <div class="marquee-content">
+                    <span>🚀 Business Proposals</span>
+                    <span>📝 SEO Blogs</span>
+                    <span>✉️ Cold Emails</span>
+                    <span>📱 Social Media</span>
+                    <span>💼 Contracts</span>
+                    <span>🛍️ E-commerce</span>
+                    <span>🎥 YouTube Scripts</span>
+                    <span>📊 Reports</span>
+                    <!-- Repeat for seamless scroll -->
+                    <span>🚀 Business Proposals</span>
+                    <span>📝 SEO Blogs</span>
+                    <span>✉️ Cold Emails</span>
+                    <span>📱 Social Media</span>
+                    <span>💼 Contracts</span>
+                    <span>🛍️ E-commerce</span>
+                    <span>🎥 YouTube Scripts</span>
+                    <span>📊 Reports</span>
+                </div>
+            </div>
+        </div>
+
+        <section id="features" class="features-section">
             <div class="container">
-                <h2 class="section-title text-center">8 Tools, 1 Price</h2>
+                <div class="section-header text-center" data-aos="fade-up">
+                    <h2 class="section-title">One Tool. <span class="gradient-text">Infinite Possibilities.</span></h2>
+                    <p>Why pay for 8 different software subscriptions when you can have it all in one dashboard?</p>
+                </div>
+
                 <div class="features-grid">
-                    <div class="feature-card">
-                        <div class="feature-icon">📝</div>
-                        <h3>Business Docs</h3>
-                        <p>Write proposals, invoices, contracts, and SOPs perfectly formatted.</p>
+                    <div class="feature-card glass" data-aos="fade-up" data-aos-delay="100">
+                        <div class="feature-icon-wrapper gradient-bg">
+                            <span class="feature-icon">📄</span>
+                        </div>
+                        <h3>Professional Docs</h3>
+                        <p>Generate bulletproof proposals, invoices, reports, and SOPs perfectly formatted for PDF export.</p>
                     </div>
-                    <div class="feature-card">
-                        <div class="feature-icon">📱</div>
-                        <h3>Social & Marketing</h3>
-                        <p>Generate highly engaging posts for LinkedIn, Twitter, and Facebook.</p>
+                    <div class="feature-card glass" data-aos="fade-up" data-aos-delay="200">
+                        <div class="feature-icon-wrapper gradient-bg">
+                            <span class="feature-icon">📱</span>
+                        </div>
+                        <h3>Social & Ads</h3>
+                        <p>Instantly create viral Twitter threads, LinkedIn thought-leadership, and high-converting ad copy.</p>
                     </div>
-                    <div class="feature-card">
-                        <div class="feature-icon">📈</div>
-                        <h3>SEO & Ads</h3>
-                        <p>Write ranking blog posts and high-converting ad copy instantly.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="how-it-works" class="section">
-            <div class="container">
-                <h2 class="section-title text-center">How It Works</h2>
-                <div class="steps-grid">
-                    <div class="step-card">
-                        <div class="step-number">1</div>
-                        <h3>Select a Tool</h3>
-                        <p>Choose from 8 different AI tools depending on what you need to write.</p>
-                    </div>
-                    <div class="step-card">
-                        <div class="step-number">2</div>
-                        <h3>Provide Context</h3>
-                        <p>Give the AI a few rough bullet points or details to work with.</p>
-                    </div>
-                    <div class="step-card">
-                        <div class="step-number">3</div>
-                        <h3>Generate & Export</h3>
-                        <p>Copy the HTML, or download a perfectly formatted PDF.</p>
+                    <div class="feature-card glass" data-aos="fade-up" data-aos-delay="300">
+                        <div class="feature-icon-wrapper gradient-bg">
+                            <span class="feature-icon">🔍</span>
+                        </div>
+                        <h3>SEO & Content</h3>
+                        <p>Dominate search rankings with optimized blog articles, product descriptions, and YouTube scripts.</p>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section id="generator" class="section bg-light">
+        <!-- Detailed How It Works Section with Image -->
+        <section class="split-section">
+            <div class="container split-container">
+                <div class="split-text" data-aos="fade-right">
+                    <h2>Lightning Fast <span class="gradient-text">Workflow</span></h2>
+                    <ul class="check-list">
+                        <li>
+                            <div class="check-icon">✓</div>
+                            <div>
+                                <strong>Select Your Agent</strong>
+                                <p>Choose exactly what you need from our library of highly-tuned AI personas.</p>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="check-icon">✓</div>
+                            <div>
+                                <strong>Brain Dump</strong>
+                                <p>Don't worry about formatting. Just dump your raw thoughts into the context box.</p>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="check-icon">✓</div>
+                            <div>
+                                <strong>Export instantly</strong>
+                                <p>Click generate and copy the HTML or download a beautifully formatted PDF.</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="split-image" data-aos="fade-left">
+                    <img src="https://images.unsplash.com/photo-1664575602276-acd073f104c1?auto=format&fit=crop&q=80&w=800" alt="Workflow" class="rounded-image glow-shadow">
+                </div>
+            </div>
+        </section>
+
+        <section id="generator" class="app-section">
             <div class="container">
-                <h2 class="section-title">AI Toolbox Dashboard</h2>
-                <div class="generator-layout">
-                    <div class="card form-card">
-                        <form id="doc-form">
+                <div class="app-container glass" data-aos="fade-up">
+                    <div class="app-sidebar">
+                        <div class="app-header">
+                            <h3>Workspace</h3>
+                            <p>Generate a new document</p>
+                        </div>
+                        <form id="doc-form" class="modern-form">
                             <div class="form-group">
-                                <label for="title">Title / Name</label>
-                                <input type="text" id="title" name="title" required placeholder="e.g., Q3 Marketing Plan">
+                                <label for="title">Document Title</label>
+                                <input type="text" id="title" name="title" required placeholder="e.g., Q3 Marketing Plan" class="modern-input">
                             </div>
                             
                             <div class="form-group">
-                                <label for="document_type">Select AI Tool</label>
-                                <select id="document_type" name="document_type" required>
-                                    <optgroup label="Business Documents">
-                                        <option value="proposal">Business Proposal</option>
-                                        <option value="invoice">Invoice</option>
-                                        <option value="contract">Contract / Agreement</option>
-                                        <option value="sop">SOP</option>
-                                        <option value="report">Business Report</option>
-                                    </optgroup>
-                                    <optgroup label="Marketing & Social">
-                                        <option value="social_media">Social Media Post (LinkedIn/Twitter/FB)</option>
-                                        <option value="email">Professional Email / Outreach</option>
-                                        <option value="blog">SEO Blog Article</option>
-                                        <option value="product_desc">Product Description</option>
-                                        <option value="youtube">YouTube Video Script</option>
-                                        <option value="ad_copy">Ad Copy (Facebook/Google Ads)</option>
-                                    </optgroup>
-                                    <optgroup label="Editing">
-                                        <option value="rewrite">Rewrite & Improve Text</option>
-                                    </optgroup>
-                                </select>
+                                <label for="document_type">AI Agent Model</label>
+                                <div class="custom-select-wrapper">
+                                    <select id="document_type" name="document_type" required class="modern-input">
+                                        <optgroup label="Business Documents">
+                                            <option value="proposal">Business Proposal</option>
+                                            <option value="invoice">Invoice</option>
+                                            <option value="contract">Contract / Agreement</option>
+                                            <option value="sop">Standard Operating Procedure</option>
+                                            <option value="report">Business Report</option>
+                                        </optgroup>
+                                        <optgroup label="Marketing & Social">
+                                            <option value="social_media">Social Media (LinkedIn/X)</option>
+                                            <option value="email">Cold Email / Outreach</option>
+                                            <option value="blog">SEO Blog Article</option>
+                                            <option value="product_desc">Product Description</option>
+                                            <option value="youtube">YouTube Video Script</option>
+                                            <option value="ad_copy">Ad Copy (FB/Google)</option>
+                                        </optgroup>
+                                        <optgroup label="Editing">
+                                            <option value="rewrite">Rewrite & Improve</option>
+                                        </optgroup>
+                                    </select>
+                                </div>
                             </div>
 
                             <div class="form-group">
-                                <label for="user_input">Main Content / Rough Notes</label>
-                                <textarea id="user_input" name="user_input" rows="6" required placeholder="e.g., Client wants a website redesign. Budget is $5,000. Timeline is 4 weeks. Key pages: Home, About, Contact."></textarea>
-                                <small class="help-text">Don't worry about formatting, just brain-dump the facts!</small>
+                                <label for="user_input">Raw Input / Brain Dump</label>
+                                <textarea id="user_input" name="user_input" rows="6" required placeholder="Dump your rough notes here..." class="modern-input"></textarea>
                             </div>
 
                             <div class="form-group">
-                                <label for="additional_context">Additional Context (Optional)</label>
-                                <textarea id="additional_context" name="additional_context" rows="3" placeholder="Any specific tone, company names, or details to include..."></textarea>
+                                <label for="additional_context">Tone & Context (Optional)</label>
+                                <textarea id="additional_context" name="additional_context" rows="2" placeholder="e.g., Make it professional but aggressive..." class="modern-input"></textarea>
                             </div>
 
-                            <button type="submit" class="btn btn-primary btn-block" id="generate-btn">
-                                <span class="btn-text">Generate Document</span>
+                            <button type="submit" class="btn btn-glow btn-block generate-action" id="generate-btn">
+                                <span class="btn-text">Initialize AI Engine</span>
                                 <span class="spinner hidden"></span>
                             </button>
                         </form>
                     </div>
 
-                    <div class="card results-card" id="results-area">
+                    <div class="app-main" id="results-area">
                         <div class="results-placeholder" id="results-placeholder">
-                            <div class="icon-placeholder">📄</div>
-                            <p>Your generated document will appear here.</p>
+                            <div class="placeholder-animation">
+                                <div class="pulse-ring"></div>
+                                <span class="placeholder-icon">⚡</span>
+                            </div>
+                            <h3>Awaiting Input</h3>
+                            <p>Select a tool and click generate to awaken the AI.</p>
                         </div>
                         
                         <div class="loading-state hidden" id="loading-state">
-                            <div class="spinner-large"></div>
-                            <p>Generating your document...</p>
+                            <div class="neural-spinner"></div>
+                            <h3>Neural Engine Processing...</h3>
+                            <p>Crafting your perfect document.</p>
                         </div>
                         
                         <div class="results-content hidden" id="results-content">
-                            <div class="results-actions">
-                                <h3>Preview</h3>
+                            <div class="results-actions glass">
+                                <h3>Output Generated</h3>
                                 <div class="action-buttons">
-                                    <button class="btn btn-secondary btn-sm" id="copy-html-btn">Copy HTML</button>
-                                    <button class="btn btn-primary btn-sm" id="download-pdf-btn">Download PDF</button>
+                                    <button class="btn btn-outline btn-sm" id="copy-html-btn">Copy HTML</button>
+                                    <button class="btn btn-glow btn-sm" id="download-pdf-btn">Download PDF</button>
                                 </div>
                             </div>
-                            <div class="iframe-container">
+                            <div class="iframe-container modern-iframe">
                                 <iframe id="preview-iframe" title="Document Preview"></iframe>
                             </div>
                         </div>
@@ -157,20 +241,28 @@
             </div>
         </section>
 
-        <section id="history" class="section">
+        <section id="history" class="history-section">
             <div class="container">
-                <h2 class="section-title">Document History</h2>
+                <div class="section-header text-center" data-aos="fade-up">
+                    <h2 class="section-title">Your <span class="gradient-text">Archive</span></h2>
+                    <p>Previous generations are securely stored here.</p>
+                </div>
                 <div class="history-grid" id="history-grid">
-                    <!-- History cards will be injected here -->
                     <p class="empty-state">No documents generated yet.</p>
                 </div>
             </div>
         </section>
     </main>
 
-    <footer class="footer">
-        <div class="container">
-            <p>&copy; 2026 DocGen AI. All rights reserved.</p>
+    <footer class="modern-footer">
+        <div class="container footer-content">
+            <div class="footer-brand">
+                <span class="logo-text">AI Toolbox</span>
+                <p>Empowering the next generation of business.</p>
+            </div>
+            <div class="footer-links">
+                <p>&copy; 2026 AI Toolbox SaaS. All rights reserved.</p>
+            </div>
         </div>
     </footer>
 
@@ -178,38 +270,51 @@
 
     <!-- Auth Modal -->
     <div id="auth-modal" class="modal hidden">
-        <div class="modal-content card">
+        <div class="modal-content glass text-center">
             <span class="close-modal">&times;</span>
-            <h2 id="auth-title">Sign In</h2>
-            <form id="auth-form">
+            <div class="modal-icon">🔐</div>
+            <h2 id="auth-title">Access Portal</h2>
+            <form id="auth-form" class="modern-form" style="margin-top: 20px;">
                 <div class="form-group">
-                    <label for="email">Email</label>
-                    <input type="email" id="email" required>
+                    <input type="email" id="email" required placeholder="Email Address" class="modern-input">
                 </div>
                 <div class="form-group">
-                    <label for="password">Password</label>
-                    <input type="password" id="password" required>
+                    <input type="password" id="password" required placeholder="Password" class="modern-input">
                 </div>
-                <button type="submit" class="btn btn-primary btn-block" id="auth-btn">Sign In</button>
+                <button type="submit" class="btn btn-glow btn-block" id="auth-btn">Authenticate</button>
             </form>
-            <p class="auth-switch text-center" style="margin-top: 15px;">
-                <a href="#" id="toggle-auth">Need an account? Sign up</a>
+            <p class="auth-switch text-center" style="margin-top: 20px;">
+                <a href="#" id="toggle-auth" class="text-link">Need an account? Sign up</a>
             </p>
         </div>
     </div>
 
     <!-- Upgrade Modal -->
     <div id="upgrade-modal" class="modal hidden">
-        <div class="modal-content card text-center">
+        <div class="modal-content glass text-center">
             <span class="close-modal">&times;</span>
-            <div class="feature-icon">🚀</div>
+            <div class="modal-icon glow">💎</div>
             <h2>Upgrade to Pro</h2>
-            <p>You've reached your limit of 3 free documents.</p>
-            <p style="margin: 20px 0; color: var(--gray-600);">Upgrade to Pro for unlimited generation, premium templates, and export features.</p>
-            <div id="paypal-button-container" style="margin-top: 20px;"></div>
+            <p class="upgrade-subtitle">Free tier limit reached.</p>
+            <div class="upgrade-features text-left">
+                <p>✓ Unlimited AI Generations</p>
+                <p>✓ All 8 Premium Agents</p>
+                <p>✓ Priority Server Processing</p>
+                <p>✓ Instant PDF Exports</p>
+            </div>
+            <h3 class="price-tag">$15 <span>/ month</span></h3>
+            <div id="paypal-button-container" style="margin-top: 25px;"></div>
         </div>
     </div>
 
+    <!-- AOS Script -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({
+            once: true,
+            offset: 50,
+        });
+    </script>
     <script src="app.js"></script>
 </body>
 </html>
