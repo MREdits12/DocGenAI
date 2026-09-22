@@ -1,9 +1,8 @@
-"""DocGen AI - AI Generation Service using Google Gemini"""
-import google.generativeai as genai
+"""DocGen AI - AI Generation Service using Groq (Llama 3.1)"""
+from groq import Groq
 from app.config import get_settings
 from app.models import DocumentType
 
-# Prompt templates for each document type
 PROMPTS = {
     DocumentType.PROPOSAL: """You are a professional business proposal writer. 
 Generate a polished, compelling business proposal based on the following information.
@@ -285,155 +284,47 @@ ADDITIONAL CONTEXT (Tone / Instructions):
 {additional_context}""",
 }
 
-# CSS styling injected into all generated documents for professional look
 DOCUMENT_CSS = """
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-    
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    
     body {
         font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-        line-height: 1.7;
-        color: #1a1a2e;
-        max-width: 800px;
-        margin: 0 auto;
-        padding: 40px;
-        background: #ffffff;
+        line-height: 1.7; color: #1a1a2e; max-width: 800px;
+        margin: 0 auto; padding: 40px; background: #ffffff;
     }
-    
-    h1 {
-        font-size: 28px;
-        font-weight: 700;
-        color: #1a1a2e;
-        margin-bottom: 8px;
-        border-bottom: 3px solid #6c63ff;
-        padding-bottom: 12px;
-    }
-    
-    h2 {
-        font-size: 20px;
-        font-weight: 600;
-        color: #2d2d5e;
-        margin-top: 32px;
-        margin-bottom: 12px;
-        padding-bottom: 6px;
-        border-bottom: 1px solid #e8e8f0;
-    }
-    
-    h3 {
-        font-size: 16px;
-        font-weight: 600;
-        color: #3d3d7e;
-        margin-top: 20px;
-        margin-bottom: 8px;
-    }
-    
-    p {
-        margin-bottom: 12px;
-        font-size: 14px;
-    }
-    
-    ul, ol {
-        margin: 12px 0;
-        padding-left: 24px;
-    }
-    
-    li {
-        margin-bottom: 6px;
-        font-size: 14px;
-    }
-    
-    table {
-        width: 100%;
-        border-collapse: collapse;
-        margin: 16px 0;
-        font-size: 13px;
-    }
-    
-    thead {
-        background: #6c63ff;
-        color: white;
-    }
-    
-    th {
-        padding: 10px 14px;
-        text-align: left;
-        font-weight: 600;
-    }
-    
-    td {
-        padding: 10px 14px;
-        border-bottom: 1px solid #e8e8f0;
-    }
-    
-    tbody tr:nth-child(even) {
-        background: #f8f8fc;
-    }
-    
+    h1 { font-size: 28px; font-weight: 700; color: #1a1a2e; margin-bottom: 8px; border-bottom: 3px solid #6c63ff; padding-bottom: 12px; }
+    h2 { font-size: 20px; font-weight: 600; color: #2d2d5e; margin-top: 32px; margin-bottom: 12px; padding-bottom: 6px; border-bottom: 1px solid #e8e8f0; }
+    h3 { font-size: 16px; font-weight: 600; color: #3d3d7e; margin-top: 20px; margin-bottom: 8px; }
+    p { margin-bottom: 12px; font-size: 14px; }
+    ul, ol { margin: 12px 0; padding-left: 24px; }
+    li { margin-bottom: 6px; font-size: 14px; }
+    table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 13px; }
+    thead { background: #6c63ff; color: white; }
+    th { padding: 10px 14px; text-align: left; font-weight: 600; }
+    td { padding: 10px 14px; border-bottom: 1px solid #e8e8f0; }
+    tbody tr:nth-child(even) { background: #f8f8fc; }
     strong { font-weight: 600; }
-    
-    .cover-page {
-        text-align: center;
-        padding: 60px 0;
-        margin-bottom: 40px;
-        border-bottom: 2px solid #6c63ff;
-    }
-    
-    .signature-line {
-        border-top: 1px solid #333;
-        width: 250px;
-        margin-top: 40px;
-        padding-top: 8px;
-    }
-    
-    .disclaimer {
-        margin-top: 40px;
-        padding: 12px;
-        background: #fff3cd;
-        border-left: 4px solid #ffc107;
-        font-size: 12px;
-        color: #856404;
-    }
+    .cover-page { text-align: center; padding: 60px 0; margin-bottom: 40px; border-bottom: 2px solid #6c63ff; }
+    .signature-line { border-top: 1px solid #333; width: 250px; margin-top: 40px; padding-top: 8px; }
+    .disclaimer { margin-top: 40px; padding: 12px; background: #fff3cd; border-left: 4px solid #ffc107; font-size: 12px; color: #856404; }
 </style>
 """
 
 
 class AIService:
-    """Service for generating documents using Google Gemini."""
+    """Service for generating documents using Groq (Llama 3.1 70B)."""
 
     def __init__(self):
         settings = get_settings()
-        if settings.gemini_api_key:
-            genai.configure(api_key=settings.gemini_api_key)
-            
-            # Auto-discover a supported model for this specific API Key
-            best_model = "gemini-1.5-flash"
-            try:
-                available = []
-                for m in genai.list_models():
-                    if 'generateContent' in m.supported_generation_methods:
-                        name = m.name.replace('models/', '')
-                        available.append(name)
-                
-                if available:
-                    flash_models = [m for m in available if 'flash' in m]
-                    pro_models = [m for m in available if 'pro' in m]
-                    
-                    if flash_models:
-                        best_model = flash_models[0]
-                    elif pro_models:
-                        best_model = pro_models[0]
-                    else:
-                        best_model = available[0]
-                        
-                print(f"[OK] Auto-selected AI model: {best_model}")
-            except Exception as e:
-                print(f"[ERROR] Failed to auto-detect models: {e}")
-                
-            self.model = genai.GenerativeModel(best_model)
+        if settings.groq_api_key:
+            self.client = Groq(api_key=settings.groq_api_key)
+            self.model = "llama-3.1-70b-versatile"
+            print(f"[OK] Groq AI initialized with model: {self.model}")
         else:
+            self.client = None
             self.model = None
+            print("[WARN] No GROQ_API_KEY set. AI generation will use demo mode.")
 
     async def generate_document(
         self,
@@ -442,7 +333,7 @@ class AIService:
         additional_context: str | None = None,
     ) -> str:
         """Generate a professional document using AI."""
-        if not self.model:
+        if not self.client:
             return self._generate_demo_document(document_type, user_input)
 
         prompt_template = PROMPTS.get(document_type, PROMPTS[DocumentType.REPORT])
@@ -451,15 +342,46 @@ class AIService:
             additional_context=additional_context or "No additional context provided.",
         )
 
-        response = await self.model.generate_content_async(
-            prompt,
-            generation_config=genai.types.GenerationConfig(
+        try:
+            chat_completion = self.client.chat.completions.create(
+                messages=[
+                    {
+                        "role": "system",
+                        "content": "You are a professional document generator. You output ONLY raw HTML content. Never wrap your output in markdown code fences. Never include ```html or ```. Just output the HTML directly."
+                    },
+                    {
+                        "role": "user",
+                        "content": prompt,
+                    }
+                ],
+                model=self.model,
                 temperature=0.7,
-                max_output_tokens=8000,
-            ),
-        )
+                max_tokens=8000,
+            )
 
-        html_content = response.text.strip()
+            html_content = chat_completion.choices[0].message.content.strip()
+        except Exception as e:
+            print(f"[ERROR] Primary model failed: {e}")
+            try:
+                chat_completion = self.client.chat.completions.create(
+                    messages=[
+                        {
+                            "role": "system",
+                            "content": "You are a professional document generator. Output ONLY raw HTML."
+                        },
+                        {
+                            "role": "user",
+                            "content": prompt,
+                        }
+                    ],
+                    model="llama-3.1-8b-instant",
+                    temperature=0.7,
+                    max_tokens=8000,
+                )
+                html_content = chat_completion.choices[0].message.content.strip()
+            except Exception as e2:
+                print(f"[ERROR] Fallback model also failed: {e2}")
+                raise e2
 
         if html_content.startswith("```html"):
             html_content = html_content[7:]
@@ -496,25 +418,17 @@ class AIService:
 <body>
     <div class="cover-page">
         <h1>{title}</h1>
-        <p><em>Generated by DocGen AI</em></p>
+        <p><em>Generated by AI Toolbox</em></p>
     </div>
-    
     <h2>Demo Document</h2>
-    <p>This is a demo document generated without an AI API key. 
-    To generate real professional documents, add your Google Gemini API key to the <code>.env</code> file.</p>
-    
+    <p>This is a demo document. To generate real AI-powered documents, add your Groq API key.</p>
     <h2>Your Input</h2>
     <p>{user_input}</p>
-    
-    <h2>How It Works</h2>
-    <ol>
-        <li>Add your free Gemini API key to <code>.env</code></li>
-        <li>Restart the server</li>
-        <li>The AI will generate a full professional {title.lower()} based on your input</li>
-    </ol>
 </body>
 </html>"""
 
 
-# Singleton instance
 ai_service = AIService()
+
+
+
